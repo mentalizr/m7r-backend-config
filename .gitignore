@@ -1,0 +1,10 @@
+*~
+.gradle/*
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/$PRODUCT_WORKSPACE_FILE$
+build/*
+gradle/
+gradlew
+gradlew.bat
+
