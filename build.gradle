@@ -18,8 +18,17 @@ repositories {
 
 dependencies {
 
+    implementation 'org.mentalizr:m7r-service-objects:0.0.1-SNAPSHOT'
+
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'com.github.arthurpicht:AP-Configuration:0.1.0'
 
-//    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
 }
+
+test {
+    useJUnitPlatform()
+}
+

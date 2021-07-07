@@ -1,2 +1,4 @@
 rootProject.name = 'm7r-backend-config'
 
+includeBuild('../m7r-service-objects')
+
