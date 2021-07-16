@@ -1,7 +1,7 @@
 package org.mentalizr.backend.config;
 
 import org.junit.jupiter.api.Test;
-import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigSO;
+import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +13,7 @@ class ProjectConfigurationTest {
     void getApplicationConfigSODefaultOnly() {
         ProjectConfiguration projectConfiguration
                 = new ProjectConfiguration(resourcesDir + "m7r-application-defaultOnly.conf");
-        ApplicationConfigSO applicationConfigSO = projectConfiguration.getApplicationConfigSO("bar");
+        ApplicationConfigPatientSO applicationConfigSO = projectConfiguration.getApplicationConfigPatientSO("bar");
 
         assertEquals("dummy name", applicationConfigSO.getName());
         assertEquals("dummy_logo.png", applicationConfigSO.getLogo());
@@ -31,7 +31,7 @@ class ProjectConfigurationTest {
         ProjectConfiguration projectConfiguration
                 = new ProjectConfiguration(resourcesDir + "m7r-application-foo.conf");
 
-        ApplicationConfigSO applicationConfigSO = projectConfiguration.getApplicationConfigSO("foo");
+        ApplicationConfigPatientSO applicationConfigSO = projectConfiguration.getApplicationConfigPatientSO("foo");
         assertEquals("program foo", applicationConfigSO.getName());
         assertEquals("foo_logo.png", applicationConfigSO.getLogo());
         assertFalse(applicationConfigSO.isProgram());
@@ -42,7 +42,7 @@ class ProjectConfigurationTest {
         assertFalse(applicationConfigSO.isVideoConference());
         assertFalse(applicationConfigSO.isTherapist());
 
-        applicationConfigSO = projectConfiguration.getApplicationConfigSO("bar");
+        applicationConfigSO = projectConfiguration.getApplicationConfigPatientSO("bar");
         assertEquals("dummy name", applicationConfigSO.getName());
         assertEquals("dummy_logo.png", applicationConfigSO.getLogo());
         assertTrue(applicationConfigSO.isProgram());

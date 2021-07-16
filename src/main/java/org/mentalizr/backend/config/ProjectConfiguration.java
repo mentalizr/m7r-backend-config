@@ -2,7 +2,8 @@ package org.mentalizr.backend.config;
 
 import de.arthurpicht.configuration.ConfigurationFactory;
 import de.arthurpicht.configuration.ConfigurationFileNotFoundException;
-import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigSO;
+import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
+import org.mentalizr.serviceObjects.frontend.therapist.ApplicationConfigTherapistSO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,7 @@ public class ProjectConfiguration {
 
     private static final String DEFAULT = "default";
 
-    private Map<String, ApplicationConfigSO> projectConfigSOMap;
+    private Map<String, ApplicationConfigPatientSO> projectConfigSOMap;
 
     public ProjectConfiguration() {
         logger.info("Start initializing application configuration. Bind [" + M7R_CONFIG_FILE + "] from classpath." );
@@ -57,7 +58,7 @@ public class ProjectConfiguration {
         for (String programId : configurationFactory.getSectionNames()) {
             de.arthurpicht.configuration.Configuration projectConfiguration
                     = configurationFactory.getConfiguration(programId);
-            ApplicationConfigSO applicationConfigSO = getApplicationConfigSO(projectConfiguration);
+            ApplicationConfigPatientSO applicationConfigSO = getApplicationConfigPatientSO(projectConfiguration);
             projectConfigSOMap.put(programId, applicationConfigSO);
         }
     }
@@ -81,10 +82,10 @@ public class ProjectConfiguration {
         }
     }
 
-    private ApplicationConfigSO getApplicationConfigSO(de.arthurpicht.configuration.Configuration configuration) {
+    private ApplicationConfigPatientSO getApplicationConfigPatientSO(de.arthurpicht.configuration.Configuration configuration) {
         String name = configuration.getString(NAME);
         String logo = configuration.getString(LOGO);
-        ApplicationConfigSO applicationConfigSO = new ApplicationConfigSO(name, logo);
+        ApplicationConfigPatientSO applicationConfigSO = new ApplicationConfigPatientSO(name, logo);
 
         boolean program = configuration.getBoolean(PROGRAM, false);
         applicationConfigSO.setProgram(program);
@@ -110,11 +111,19 @@ public class ProjectConfiguration {
         return applicationConfigSO;
     }
 
-    public ApplicationConfigSO getApplicationConfigSO(String projectName) {
+    public ApplicationConfigPatientSO getApplicationConfigPatientSO(String projectName) {
         if (projectConfigSOMap.containsKey(projectName))
             return projectConfigSOMap.get(projectName);
 
         return projectConfigSOMap.get(DEFAULT);
+    }
+
+    public ApplicationConfigTherapistSO getApplicationConfigTherapistSO(String projectName) {
+        ApplicationConfigPatientSO applicationConfigPatientSO = getApplicationConfigPatientSO(projectName);
+
+        return new ApplicationConfigTherapistSO(
+                applicationConfigPatientSO.getName(), applicationConfigPatientSO.getLogo()
+        );
     }
 
 }
