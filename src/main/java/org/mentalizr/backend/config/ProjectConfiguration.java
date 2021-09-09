@@ -85,30 +85,32 @@ public class ProjectConfiguration {
     private ApplicationConfigPatientSO getApplicationConfigPatientSO(de.arthurpicht.configuration.Configuration configuration) {
         String name = configuration.getString(NAME);
         String logo = configuration.getString(LOGO);
-        ApplicationConfigPatientSO applicationConfigSO = new ApplicationConfigPatientSO(name, logo);
+        ApplicationConfigPatientSO applicationConfigPatientSO = new ApplicationConfigPatientSO();
+        applicationConfigPatientSO.setName(name);
+        applicationConfigPatientSO.setLogo(logo);
 
         boolean program = configuration.getBoolean(PROGRAM, false);
-        applicationConfigSO.setProgram(program);
+        applicationConfigPatientSO.setProgram(program);
 
         boolean activityDiary = configuration.getBoolean(ACTIVITY_DIARY, false);
-        applicationConfigSO.setActivityDiary(activityDiary);
+        applicationConfigPatientSO.setActivityDiary(activityDiary);
 
         boolean moodDiary = configuration.getBoolean(MOOD_DIARY, false);
-        applicationConfigSO.setMoodDiary(moodDiary);
+        applicationConfigPatientSO.setMoodDiary(moodDiary);
 
         boolean messages = configuration.getBoolean(MESSAGES, false);
-        applicationConfigSO.setMessages(messages);
+        applicationConfigPatientSO.setMessages(messages);
 
         boolean questioning = configuration.getBoolean(QUESTIONING, false);
-        applicationConfigSO.setQuestioning(questioning);
+        applicationConfigPatientSO.setQuestioning(questioning);
 
         boolean videoConference = configuration.getBoolean(VIDEO_CONFERENCE, false);
-        applicationConfigSO.setVideoConference(videoConference);
+        applicationConfigPatientSO.setVideoConference(videoConference);
 
         boolean therapist = configuration.getBoolean(THERAPIST, false);
-        applicationConfigSO.setTherapist(therapist);
+        applicationConfigPatientSO.setTherapist(therapist);
 
-        return applicationConfigSO;
+        return applicationConfigPatientSO;
     }
 
     public ApplicationConfigPatientSO getApplicationConfigPatientSO(String projectName) {
@@ -121,9 +123,11 @@ public class ProjectConfiguration {
     public ApplicationConfigTherapistSO getApplicationConfigTherapistSO(String projectName) {
         ApplicationConfigPatientSO applicationConfigPatientSO = getApplicationConfigPatientSO(projectName);
 
-        return new ApplicationConfigTherapistSO(
-                applicationConfigPatientSO.getName(), applicationConfigPatientSO.getLogo()
-        );
+        ApplicationConfigTherapistSO applicationConfigTherapistSO = new ApplicationConfigTherapistSO();
+        applicationConfigTherapistSO.setName(applicationConfigPatientSO.getName());
+        applicationConfigTherapistSO.setLogo(applicationConfigPatientSO.getLogo());
+
+        return applicationConfigTherapistSO;
     }
 
 }
