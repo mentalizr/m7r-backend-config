@@ -17,15 +17,13 @@ repositories {
 }
 
 dependencies {
-
     implementation 'org.mentalizr:m7r-service-objects:0.0.1-SNAPSHOT'
 
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.7'
     implementation 'com.github.arthurpicht:AP-Configuration:0.1.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {
