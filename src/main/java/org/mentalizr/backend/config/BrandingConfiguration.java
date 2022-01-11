@@ -3,6 +3,7 @@ package org.mentalizr.backend.config;
 import de.arthurpicht.utils.core.assertion.AssertMethodPrecondition;
 import de.arthurpicht.utils.core.collection.Maps;
 import de.arthurpicht.utils.core.strings.Strings;
+import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigGenericSO;
 import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
 import org.mentalizr.serviceObjects.frontend.therapist.ApplicationConfigTherapistSO;
 
@@ -16,12 +17,12 @@ public class BrandingConfiguration {
     public static final String GENERIC = "generic";
 
     private final Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap;
-    private final BrandingConfigurationGeneric brandingConfigurationGeneric;
+    private final ApplicationConfigGenericSO applicationConfigGenericSO;
 
-    public BrandingConfiguration(Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap, BrandingConfigurationGeneric brandingConfigurationGeneric) {
+    public BrandingConfiguration(Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap, ApplicationConfigGenericSO applicationConfigGenericSO) {
         AssertMethodPrecondition.parameterNotNull("applicationConfigPatientSOMap", applicationConfigPatientSOMap);
         this.applicationConfigPatientSOMap = Maps.immutableMap(applicationConfigPatientSOMap);
-        this.brandingConfigurationGeneric = brandingConfigurationGeneric;
+        this.applicationConfigGenericSO = applicationConfigGenericSO;
     }
 
     public ApplicationConfigPatientSO getApplicationConfigPatientSO(String programId) {
@@ -33,8 +34,8 @@ public class BrandingConfiguration {
         return this.applicationConfigPatientSOMap.get(DEFAULT);
     }
 
-    public BrandingConfigurationGeneric getBrandingConfigurationGeneric() {
-        return this.brandingConfigurationGeneric;
+    public ApplicationConfigGenericSO getApplicationConfigGenericSO() {
+        return this.applicationConfigGenericSO;
     }
 
     private boolean matchesAsteriskPattern(String key, String programId) {

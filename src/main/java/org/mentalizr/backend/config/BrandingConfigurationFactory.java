@@ -3,6 +3,7 @@ package org.mentalizr.backend.config;
 import de.arthurpicht.configuration.Configuration;
 import de.arthurpicht.configuration.ConfigurationFactory;
 import de.arthurpicht.configuration.ConfigurationFileNotFoundException;
+import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigGenericSO;
 import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ public class BrandingConfigurationFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(BrandingConfigurationFactory.class);
 
-    private static final String M7R_CONFIG_FILE = "m7r-branding.conf";
+    private static final String M7R_CONFIG_FILE = "m7r-instance.conf";
 
     private static final String GENERIC_TITLE = "title";
     private static final String GENERIC_LOGO = "logo";
@@ -32,13 +33,13 @@ public class BrandingConfigurationFactory {
     private static final String THERAPIST = "therapist";
 
     private final Map<String, ApplicationConfigPatientSO> applicationConfigMap;
-    private final BrandingConfigurationGeneric brandingConfigurationGeneric;
+    private final ApplicationConfigGenericSO applicationConfigGenericSO;
 
     public static BrandingConfiguration createProjectConfiguration() {
         BrandingConfigurationFactory brandingConfigurationFactory = new BrandingConfigurationFactory();
         return new BrandingConfiguration(
                 brandingConfigurationFactory.getApplicationConfigMap(),
-                brandingConfigurationFactory.getBrandingConfigurationGeneric()
+                brandingConfigurationFactory.getApplicationConfigGenericSO()
         );
     }
 
@@ -46,7 +47,7 @@ public class BrandingConfigurationFactory {
         BrandingConfigurationFactory brandingConfigurationFactory = new BrandingConfigurationFactory(configurationFilePath);
         return new BrandingConfiguration(
                 brandingConfigurationFactory.getApplicationConfigMap(),
-                brandingConfigurationFactory.brandingConfigurationGeneric);
+                brandingConfigurationFactory.applicationConfigGenericSO);
     }
 
     private BrandingConfigurationFactory() {
@@ -56,7 +57,7 @@ public class BrandingConfigurationFactory {
         bindConfigurationFromClasspath(configurationFactory);
 
         this.applicationConfigMap = obtainApplicationConfigMap(configurationFactory);
-        this.brandingConfigurationGeneric = obtainBrandingConfigurationGeneric(configurationFactory);
+        this.applicationConfigGenericSO = obtainBrandingConfigurationGeneric(configurationFactory);
     }
 
 
@@ -67,15 +68,15 @@ public class BrandingConfigurationFactory {
         bindConfigurationFromFilesystem(configurationFactory, new File(configurationFilePath));
 
         this.applicationConfigMap = obtainApplicationConfigMap(configurationFactory);
-        this.brandingConfigurationGeneric = obtainBrandingConfigurationGeneric(configurationFactory);
+        this.applicationConfigGenericSO = obtainBrandingConfigurationGeneric(configurationFactory);
     }
 
     public Map<String, ApplicationConfigPatientSO> getApplicationConfigMap() {
         return this.applicationConfigMap;
     }
 
-    public BrandingConfigurationGeneric getBrandingConfigurationGeneric() {
-        return this.brandingConfigurationGeneric;
+    public ApplicationConfigGenericSO getApplicationConfigGenericSO() {
+        return this.applicationConfigGenericSO;
     }
 
     private Map<String, ApplicationConfigPatientSO> obtainApplicationConfigMap(ConfigurationFactory configurationFactory) {
@@ -93,7 +94,7 @@ public class BrandingConfigurationFactory {
         return projectConfigSOMap;
     }
 
-    private BrandingConfigurationGeneric obtainBrandingConfigurationGeneric(ConfigurationFactory configurationFactory) {
+    private ApplicationConfigGenericSO obtainBrandingConfigurationGeneric(ConfigurationFactory configurationFactory) {
         if (!configurationFactory.hasSection(BrandingConfiguration.GENERIC))
             throw new RuntimeException("No section [generic] found in configuration file [" + M7R_CONFIG_FILE + "].");
 
@@ -109,7 +110,7 @@ public class BrandingConfigurationFactory {
                     "[" + BrandingConfiguration.GENERIC + "] of configuration file [" + M7R_CONFIG_FILE + "].");
         String logo = configuration.getString(GENERIC_LOGO);
 
-        return new BrandingConfigurationGeneric(title, logo);
+        return new ApplicationConfigGenericSO(title, logo);
     }
 
     private void bindConfigurationFromClasspath(ConfigurationFactory configurationFactory) {

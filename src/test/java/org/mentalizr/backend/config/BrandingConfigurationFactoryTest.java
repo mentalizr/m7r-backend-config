@@ -1,6 +1,7 @@
 package org.mentalizr.backend.config;
 
 import org.junit.jupiter.api.Test;
+import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigGenericSO;
 import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,11 +16,11 @@ class BrandingConfigurationFactoryTest {
                 = BrandingConfigurationFactory.createProjectConfiguration(
                 resourcesDir + "m7r-application-foo.conf");
 
-        BrandingConfigurationGeneric brandingConfigurationGeneric =
-                brandingConfiguration.getBrandingConfigurationGeneric();
+        ApplicationConfigGenericSO applicationConfigGenericSO =
+                brandingConfiguration.getApplicationConfigGenericSO();
 
-        assertEquals("generic title", brandingConfigurationGeneric.getTitle());
-        assertEquals("generic_logo.png", brandingConfigurationGeneric.getLogo());
+        assertEquals("generic title", applicationConfigGenericSO.getTitle());
+        assertEquals("generic_logo.png", applicationConfigGenericSO.getLogo());
     }
 
     @Test
