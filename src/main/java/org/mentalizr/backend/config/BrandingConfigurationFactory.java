@@ -21,6 +21,9 @@ public class BrandingConfigurationFactory {
 
     private static final String GENERIC_TITLE = "title";
     private static final String GENERIC_LOGO = "logo";
+    private static final String GENERIC__DEFAULT_LOGIN_SCREEN = "defaultLoginScreen";
+    private static final String GENERIC__DEFAULT_LOGIN_SCREEN__LOGIN = "login";
+    private static final String GENERIC__DEFAULT_LOGIN_SCREEN__ACCESS_KEY = "accessKey";
 
     private static final String NAME = "name";
     private static final String LOGO = "logo";
@@ -110,7 +113,16 @@ public class BrandingConfigurationFactory {
                     "[" + BrandingConfiguration.GENERIC + "] of configuration file [" + M7R_CONFIG_FILE + "].");
         String logo = configuration.getString(GENERIC_LOGO);
 
-        return new ApplicationConfigGenericSO(title, logo);
+        if (!configuration.containsKey(GENERIC__DEFAULT_LOGIN_SCREEN))
+            throw new RuntimeException("Configuration key [" + GENERIC__DEFAULT_LOGIN_SCREEN + "] missing in section " +
+                    "[" + BrandingConfiguration.GENERIC + "] of configuration fiel [" + M7R_CONFIG_FILE + "].");
+        String defaultLoginScreen = configuration.getString(GENERIC__DEFAULT_LOGIN_SCREEN);
+        if (!defaultLoginScreen.equals(GENERIC__DEFAULT_LOGIN_SCREEN__LOGIN) && !defaultLoginScreen.equals(GENERIC__DEFAULT_LOGIN_SCREEN__ACCESS_KEY))
+            throw new RuntimeException("Configuration key [" + GENERIC__DEFAULT_LOGIN_SCREEN + "] has illegal value " +
+                    "[" + defaultLoginScreen + "]. Must be [" + GENERIC__DEFAULT_LOGIN_SCREEN__LOGIN + "] or " +
+                    "[" + GENERIC__DEFAULT_LOGIN_SCREEN__ACCESS_KEY + "].");
+
+        return new ApplicationConfigGenericSO(title, logo, defaultLoginScreen);
     }
 
     private void bindConfigurationFromClasspath(ConfigurationFactory configurationFactory) {

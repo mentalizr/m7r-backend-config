@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class Configuration {
 
-    public enum DefaultLogin {ACCESS_KEY, LOGIN}
+//    public enum DefaultLogin {ACCESS_KEY, LOGIN}
 
     private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
@@ -42,7 +42,6 @@ public class Configuration {
     private static de.arthurpicht.configuration.Configuration configurationUserDB;
     private static de.arthurpicht.configuration.Configuration configurationDocumentDB;
     private static de.arthurpicht.configuration.Configuration configurationDir;
-    private static de.arthurpicht.configuration.Configuration configurationApplication;
 
     static {
         init();
@@ -67,7 +66,6 @@ public class Configuration {
         configurationUserDB = configurationFactory.getConfiguration(SECTION_NAME__USER_DB);
         configurationDocumentDB = configurationFactory.getConfiguration(SECTION_NAME__DOCUMENT_DB);
         configurationDir = configurationFactory.getConfiguration(SECTION_NAME__DIR);
-        configurationApplication = configurationFactory.getConfiguration(SECTION_NAME__APPLICATION);
     }
 
     private static void bindConfigurationFromFilesystem(ConfigurationFactory configurationFactory, File configFile) {
@@ -109,9 +107,6 @@ public class Configuration {
         checkForDirExistence(PROPERTY__DIR_IMAGE_ROOT);
 
         checkForKeyExistance(SECTION_NAME__APPLICATION, PROPERTY__APPLICATION_DEFAULT_LOGIN);
-        String defaultLogin = configurationApplication.getString(PROPERTY__APPLICATION_DEFAULT_LOGIN).toUpperCase();
-        if (!defaultLogin.equals("ACCESS_KEY") && !defaultLogin.equals("LOGIN"))
-            throw new RuntimeException("Configuration value for default login method unknown: " + defaultLogin);
     }
 
     private static void checkForKeyExistance(String sectionName, String key) {
@@ -182,14 +177,6 @@ public class Configuration {
 
     public static File getDirImageRoot() {
         return new File(configurationDir.getString(PROPERTY__DIR_IMAGE_ROOT));
-    }
-
-    public static DefaultLogin getDefaultLogin() {
-        String defaultLogin = configurationApplication.getString(PROPERTY__APPLICATION_DEFAULT_LOGIN);
-        if (defaultLogin.equalsIgnoreCase("ACCESS_KEY")) {
-            return DefaultLogin.ACCESS_KEY;
-        }
-        return DefaultLogin.LOGIN;
     }
 
 }
