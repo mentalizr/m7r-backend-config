@@ -14,6 +14,9 @@ public class Configuration {
 
 //    public enum DefaultLogin {ACCESS_KEY, LOGIN}
 
+    private static final String CONTENT_ROOT_CONTAINER = "/mentalizr/content";
+    private static final String IMAGE_ROOT_CONTAINER = "/mentalizr/img-base-tmp";
+
     private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
     private static final String M7R_CONFIG_FILE = "m7r.conf";
@@ -24,18 +27,21 @@ public class Configuration {
     private static final String SECTION_NAME__DIR = "dir";
     private static final String SECTION_NAME__APPLICATION = "application";
 
+    private static final String PROPERTY__USER_DB_ROOT_PASSWORD = "db_root_password";
     private static final String PROPERTY__USER_DB_NAME = "db_name";
     private static final String PROPERTY__USER_DB_USER = "db_user";
     private static final String PROPERTY__USER_DB_PASSWORD = "db_password";
     private static final String PROPERTY__USER_DB_HOST = "db_host";
 
+    private static final String PROPERTY__DOCUMENT_DB_ADMIN_NAME = "db_admin_user";
+    private static final String PROPERTY__DOCUMENT_DB_ADMIN_PASSWORD = "db_admin_password";
     private static final String PROPERTY__DOCUMENT_DB_HOST = "db_host";
     private static final String PROPERTY__DOCUMENT_DB_NAME = "db_name";
     private static final String PROPERTY__DOCUMENT_DB_USER = "db_user";
     private static final String PROPERTY__DOCUMENT_DB_PASSWORD = "db_password";
 
-    private static final String PROPERTY__DIR_PROGRAM_CONTENT_ROOT = "program_content_root";
-    private static final String PROPERTY__DIR_IMAGE_ROOT = "image_root";
+//    private static final String PROPERTY__DIR_PROGRAM_CONTENT_ROOT = "program_content_root";
+//    private static final String PROPERTY__DIR_IMAGE_ROOT = "image_root";
 
     private static final String PROPERTY__APPLICATION_DEFAULT_LOGIN = "default_login";
 
@@ -91,20 +97,23 @@ public class Configuration {
 
     private static void doChecks() {
 
+        checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_ROOT_PASSWORD);
         checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_NAME);
         checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_USER);
         checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_PASSWORD);
         checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_HOST);
 
+        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_ADMIN_NAME);
+        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_ADMIN_PASSWORD);
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_HOST);
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_NAME);
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_USER);
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_PASSWORD);
 
-        checkForKeyExistance(SECTION_NAME__DIR, PROPERTY__DIR_PROGRAM_CONTENT_ROOT);
-        checkForDirExistence(PROPERTY__DIR_PROGRAM_CONTENT_ROOT);
-        checkForKeyExistance(SECTION_NAME__DIR, PROPERTY__DIR_IMAGE_ROOT);
-        checkForDirExistence(PROPERTY__DIR_IMAGE_ROOT);
+//        checkForKeyExistance(SECTION_NAME__DIR, PROPERTY__DIR_PROGRAM_CONTENT_ROOT);
+//        checkForDirExistence(PROPERTY__DIR_PROGRAM_CONTENT_ROOT);
+//        checkForKeyExistance(SECTION_NAME__DIR, PROPERTY__DIR_IMAGE_ROOT);
+//        checkForDirExistence(PROPERTY__DIR_IMAGE_ROOT);
 
         checkForKeyExistance(SECTION_NAME__APPLICATION, PROPERTY__APPLICATION_DEFAULT_LOGIN);
     }
@@ -139,6 +148,10 @@ public class Configuration {
         }
     }
 
+    public static String getUserDbRootPassword() {
+        return configurationUserDB.getString(PROPERTY__USER_DB_ROOT_PASSWORD);
+    }
+
     public static String getUserDbName() {
         return configurationUserDB.getString(PROPERTY__USER_DB_NAME);
     }
@@ -153,6 +166,14 @@ public class Configuration {
 
     public static String getUserDbHost() {
         return configurationUserDB.getString(PROPERTY__USER_DB_HOST);
+    }
+
+    public static String getDocumentDbAdminName() {
+        return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_ADMIN_NAME);
+    }
+
+    public static String getDocumentDbAdminPassword() {
+        return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_ADMIN_PASSWORD);
     }
 
     public static String getDocumentDbHost() {
@@ -172,11 +193,11 @@ public class Configuration {
     }
 
     public static Path getDirProgramContentRoot() {
-        return Paths.get(configurationDir.getString(PROPERTY__DIR_PROGRAM_CONTENT_ROOT));
+        return Paths.get(CONTENT_ROOT_CONTAINER);
     }
 
     public static File getDirImageRoot() {
-        return new File(configurationDir.getString(PROPERTY__DIR_IMAGE_ROOT));
+        return new File(IMAGE_ROOT_CONTAINER);
     }
 
 }
