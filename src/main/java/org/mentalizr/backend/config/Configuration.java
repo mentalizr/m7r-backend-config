@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 
 public class Configuration {
 
-//    public enum DefaultLogin {ACCESS_KEY, LOGIN}
-
     private static final String CONTENT_ROOT_CONTAINER = "/mentalizr/content";
     private static final String IMAGE_ROOT_CONTAINER = "/mentalizr/img-base-tmp";
 
@@ -25,7 +23,7 @@ public class Configuration {
     private static final String SECTION_NAME__USER_DB = "user-db";
     private static final String SECTION_NAME__DOCUMENT_DB = "document-db";
     private static final String SECTION_NAME__DIR = "dir";
-    private static final String SECTION_NAME__APPLICATION = "application";
+    private static final String SECTION_NAME__M7R = "m7r";
 
     private static final String PROPERTY__USER_DB_ROOT_PASSWORD = "db_root_password";
     private static final String PROPERTY__USER_DB_NAME = "db_name";
@@ -40,14 +38,13 @@ public class Configuration {
     private static final String PROPERTY__DOCUMENT_DB_USER = "db_user";
     private static final String PROPERTY__DOCUMENT_DB_PASSWORD = "db_password";
 
-//    private static final String PROPERTY__DIR_PROGRAM_CONTENT_ROOT = "program_content_root";
-//    private static final String PROPERTY__DIR_IMAGE_ROOT = "image_root";
-
-    private static final String PROPERTY__APPLICATION_DEFAULT_LOGIN = "default_login";
+    private static final String PROPERTY__M7R_ADMIN_USER = "admin_user";
+    private static final String PROPERTY__M7R_ADMIN_PASSWORD = "admin_password";
 
     private static de.arthurpicht.configuration.Configuration configurationUserDB;
     private static de.arthurpicht.configuration.Configuration configurationDocumentDB;
     private static de.arthurpicht.configuration.Configuration configurationDir;
+    private static de.arthurpicht.configuration.Configuration configurationM7r;
 
     static {
         init();
@@ -72,6 +69,7 @@ public class Configuration {
         configurationUserDB = configurationFactory.getConfiguration(SECTION_NAME__USER_DB);
         configurationDocumentDB = configurationFactory.getConfiguration(SECTION_NAME__DOCUMENT_DB);
         configurationDir = configurationFactory.getConfiguration(SECTION_NAME__DIR);
+        configurationM7r = configurationFactory.getConfiguration(SECTION_NAME__M7R);
     }
 
     private static void bindConfigurationFromFilesystem(ConfigurationFactory configurationFactory, File configFile) {
@@ -109,13 +107,6 @@ public class Configuration {
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_NAME);
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_USER);
         checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_PASSWORD);
-
-//        checkForKeyExistance(SECTION_NAME__DIR, PROPERTY__DIR_PROGRAM_CONTENT_ROOT);
-//        checkForDirExistence(PROPERTY__DIR_PROGRAM_CONTENT_ROOT);
-//        checkForKeyExistance(SECTION_NAME__DIR, PROPERTY__DIR_IMAGE_ROOT);
-//        checkForDirExistence(PROPERTY__DIR_IMAGE_ROOT);
-
-        checkForKeyExistance(SECTION_NAME__APPLICATION, PROPERTY__APPLICATION_DEFAULT_LOGIN);
     }
 
     private static void checkForKeyExistance(String sectionName, String key) {
@@ -198,6 +189,14 @@ public class Configuration {
 
     public static File getDirImageRoot() {
         return new File(IMAGE_ROOT_CONTAINER);
+    }
+
+    public static String getM7rAdminUser() {
+        return configurationM7r.getString(PROPERTY__M7R_ADMIN_USER);
+    }
+
+    public static String getM7rAdminPassword() {
+        return configurationM7r.getString(PROPERTY__M7R_ADMIN_PASSWORD);
     }
 
 }
