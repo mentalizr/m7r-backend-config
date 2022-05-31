@@ -7,13 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Configuration {
-
-//    private static final String CONTENT_ROOT_CONTAINER = "/mentalizr/content";
-//    private static final String IMAGE_ROOT_CONTAINER = "/mentalizr/img-base-tmp";
 
     private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
@@ -22,7 +17,6 @@ public class Configuration {
 
     private static final String SECTION_NAME__USER_DB = "user-db";
     private static final String SECTION_NAME__DOCUMENT_DB = "document-db";
-    private static final String SECTION_NAME__DIR = "dir";
     private static final String SECTION_NAME__M7R = "m7r";
 
     private static final String PROPERTY__USER_DB_ROOT_PASSWORD = "db_root_password";
@@ -43,7 +37,6 @@ public class Configuration {
 
     private static de.arthurpicht.configuration.Configuration configurationUserDB;
     private static de.arthurpicht.configuration.Configuration configurationDocumentDB;
-    private static de.arthurpicht.configuration.Configuration configurationDir;
     private static de.arthurpicht.configuration.Configuration configurationM7r;
 
     static {
@@ -68,7 +61,6 @@ public class Configuration {
 
         configurationUserDB = configurationFactory.getConfiguration(SECTION_NAME__USER_DB);
         configurationDocumentDB = configurationFactory.getConfiguration(SECTION_NAME__DOCUMENT_DB);
-        configurationDir = configurationFactory.getConfiguration(SECTION_NAME__DIR);
         configurationM7r = configurationFactory.getConfiguration(SECTION_NAME__M7R);
     }
 
@@ -95,21 +87,21 @@ public class Configuration {
 
     private static void doChecks() {
 
-        checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_ROOT_PASSWORD);
-        checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_NAME);
-        checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_USER);
-        checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_PASSWORD);
-        checkForKeyExistance(SECTION_NAME__USER_DB, PROPERTY__USER_DB_HOST);
+        checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_ROOT_PASSWORD);
+        checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_NAME);
+        checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_USER);
+        checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_PASSWORD);
+        checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_HOST);
 
-        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_ADMIN_NAME);
-        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_ADMIN_PASSWORD);
-        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_HOST);
-        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_NAME);
-        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_USER);
-        checkForKeyExistance(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_PASSWORD);
+        checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_ADMIN_NAME);
+        checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_ADMIN_PASSWORD);
+        checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_HOST);
+        checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_NAME);
+        checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_USER);
+        checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_PASSWORD);
     }
 
-    private static void checkForKeyExistance(String sectionName, String key) {
+    private static void checkForKeyExistence(String sectionName, String key) {
 
         boolean exists = true;
 
@@ -117,26 +109,15 @@ public class Configuration {
             exists = false;
         } else if (sectionName.equals(SECTION_NAME__DOCUMENT_DB) && !configurationDocumentDB.containsKey(key)) {
             exists = false;
-        } else if (sectionName.equals(SECTION_NAME__DIR) && !configurationDir.containsKey(key)) {
-            exists = false;
         }
 
         if (exists) return;
 
-        String message = "Missing declaration in Configuration [" + M7R_CONFIG_FILE + "] for key [" + key + "] in section [" + SECTION_NAME__USER_DB + "].";
+        String message =
+                "Missing declaration in Configuration [" + M7R_CONFIG_FILE + "] for key [" + key + "] " +
+                        "in section [" + SECTION_NAME__USER_DB + "].";
         logger.error(message);
         throw new RuntimeException(message);
-    }
-
-    private static void checkForDirExistence(String key) {
-
-        String dirName = configurationDir.getString(key);
-        File file = new File(dirName);
-        if (!file.exists() && !file.isDirectory()) {
-            String message = "Configured directory (" + key + ") not existing: " + dirName;
-            logger.error(message);
-            throw new RuntimeException(message);
-        }
     }
 
     public static String getUserDbRootPassword() {
@@ -182,14 +163,6 @@ public class Configuration {
     public static String getDocumentDbPassword() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_PASSWORD);
     }
-
-//    public static Path getDirProgramContentRoot() {
-//        return Paths.get(CONTENT_ROOT_CONTAINER);
-//    }
-
-//    public static File getDirImageRoot() {
-//        return new File(IMAGE_ROOT_CONTAINER);
-//    }
 
     public static String getM7rAdminUser() {
         return configurationM7r.getString(PROPERTY__M7R_ADMIN_USER);
