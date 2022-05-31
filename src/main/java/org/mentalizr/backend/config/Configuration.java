@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 
 public class Configuration {
 
-    private static final String CONTENT_ROOT_CONTAINER = "/mentalizr/content";
-    private static final String IMAGE_ROOT_CONTAINER = "/mentalizr/img-base-tmp";
+//    private static final String CONTENT_ROOT_CONTAINER = "/mentalizr/content";
+//    private static final String IMAGE_ROOT_CONTAINER = "/mentalizr/img-base-tmp";
 
     private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
@@ -183,13 +183,13 @@ public class Configuration {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_PASSWORD);
     }
 
-    public static Path getDirProgramContentRoot() {
-        return Paths.get(CONTENT_ROOT_CONTAINER);
-    }
+//    public static Path getDirProgramContentRoot() {
+//        return Paths.get(CONTENT_ROOT_CONTAINER);
+//    }
 
-    public static File getDirImageRoot() {
-        return new File(IMAGE_ROOT_CONTAINER);
-    }
+//    public static File getDirImageRoot() {
+//        return new File(IMAGE_ROOT_CONTAINER);
+//    }
 
     public static String getM7rAdminUser() {
         return configurationM7r.getString(PROPERTY__M7R_ADMIN_USER);
