@@ -1,8 +1,6 @@
 *~
 .gradle/*
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/$PRODUCT_WORKSPACE_FILE$
+.idea/
 build/*
 gradle/
 gradlew
