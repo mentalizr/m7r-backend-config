@@ -1,4 +1,4 @@
-package org.mentalizr.backend.config;
+package org.mentalizr.backend.config.instance;
 
 import de.arthurpicht.utils.core.assertion.AssertMethodPrecondition;
 import de.arthurpicht.utils.core.collection.Maps;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BrandingConfiguration {
+public class InstanceConfiguration {
 
     public static final String DEFAULT = "default";
     public static final String GENERIC = "generic";
@@ -19,7 +19,7 @@ public class BrandingConfiguration {
     private final Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap;
     private final ApplicationConfigGenericSO applicationConfigGenericSO;
 
-    public BrandingConfiguration(Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap, ApplicationConfigGenericSO applicationConfigGenericSO) {
+    public InstanceConfiguration(Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap, ApplicationConfigGenericSO applicationConfigGenericSO) {
         AssertMethodPrecondition.parameterNotNull("applicationConfigPatientSOMap", applicationConfigPatientSOMap);
         this.applicationConfigPatientSOMap = Maps.immutableMap(applicationConfigPatientSOMap);
         this.applicationConfigGenericSO = applicationConfigGenericSO;

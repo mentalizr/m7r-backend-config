@@ -1,4 +1,4 @@
-package org.mentalizr.backend.config;
+package org.mentalizr.backend.config.instance;
 
 public class DefaultLoginScreen {
 

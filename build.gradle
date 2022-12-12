@@ -24,6 +24,7 @@ dependencies {
     implementation 'com.github.arthurpicht:utils-core:1.4.0'
     implementation 'com.github.arthurpicht:AP-Configuration:0.1.6'
 
+    testImplementation 'com.github.arthurpicht:utils-io:0.0.17'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }

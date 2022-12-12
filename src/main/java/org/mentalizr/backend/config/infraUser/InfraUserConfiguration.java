@@ -1,4 +1,4 @@
-package org.mentalizr.backend.config;
+package org.mentalizr.backend.config.infraUser;
 
 import de.arthurpicht.configuration.ConfigurationFactory;
 import de.arthurpicht.configuration.ConfigurationFileNotFoundException;
@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-public class Configuration {
+public class InfraUserConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
+    private static final Logger logger = LoggerFactory.getLogger(InfraUserConfiguration.class);
 
     private static final String M7R_CONFIG_FILE = "m7r.conf";
     private static final String SYS_PROP = "m7r.config";
