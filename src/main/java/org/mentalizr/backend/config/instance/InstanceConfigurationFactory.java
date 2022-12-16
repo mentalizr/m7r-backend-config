@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 public class InstanceConfigurationFactory {
 
@@ -38,13 +36,13 @@ public class InstanceConfigurationFactory {
 
     private final String m7rInstanceFileLabel;
 
-    private final Map<String, ApplicationConfigPatientSO> applicationConfigMap;
+    private final InstanceConfigurationMap instanceConfigurationMap;
     private final ApplicationConfigGenericSO applicationConfigGenericSO;
 
     public static InstanceConfiguration createProjectConfigurationFromClasspath() {
         InstanceConfigurationFactory instanceConfigurationFactory = new InstanceConfigurationFactory();
         return new InstanceConfiguration(
-                instanceConfigurationFactory.getApplicationConfigMap(),
+                instanceConfigurationFactory.getInstanceConfigurationMap(),
                 instanceConfigurationFactory.getApplicationConfigGenericSO()
         );
     }
@@ -52,7 +50,7 @@ public class InstanceConfigurationFactory {
     public static InstanceConfiguration createProjectConfigurationByPath(Path configurationFilePath) {
         InstanceConfigurationFactory instanceConfigurationFactory = new InstanceConfigurationFactory(configurationFilePath);
         return new InstanceConfiguration(
-                instanceConfigurationFactory.getApplicationConfigMap(),
+                instanceConfigurationFactory.getInstanceConfigurationMap(),
                 instanceConfigurationFactory.applicationConfigGenericSO);
     }
 
@@ -63,7 +61,7 @@ public class InstanceConfigurationFactory {
         ConfigurationFactory configurationFactory = new ConfigurationFactory();
         bindConfigurationFromClasspath(configurationFactory);
 
-        this.applicationConfigMap = obtainApplicationConfigMap(configurationFactory);
+        this.instanceConfigurationMap = obtainApplicationConfigMap(configurationFactory);
         this.applicationConfigGenericSO = obtainBrandingConfigurationGeneric(configurationFactory);
     }
 
@@ -75,31 +73,31 @@ public class InstanceConfigurationFactory {
         ConfigurationFactory configurationFactory = new ConfigurationFactory();
         bindConfigurationFromFilesystem(configurationFactory, configurationFilePath.toFile());
 
-        this.applicationConfigMap = obtainApplicationConfigMap(configurationFactory);
+        this.instanceConfigurationMap = obtainApplicationConfigMap(configurationFactory);
         this.applicationConfigGenericSO = obtainBrandingConfigurationGeneric(configurationFactory);
     }
 
-    public Map<String, ApplicationConfigPatientSO> getApplicationConfigMap() {
-        return this.applicationConfigMap;
+    public InstanceConfigurationMap getInstanceConfigurationMap() {
+        return this.instanceConfigurationMap;
     }
 
     public ApplicationConfigGenericSO getApplicationConfigGenericSO() {
         return this.applicationConfigGenericSO;
     }
 
-    private Map<String, ApplicationConfigPatientSO> obtainApplicationConfigMap(ConfigurationFactory configurationFactory) {
+    private InstanceConfigurationMap obtainApplicationConfigMap(ConfigurationFactory configurationFactory) {
         if (!configurationFactory.hasSection(InstanceConfiguration.DEFAULT))
             throw new RuntimeException("No section [default] found in configuration file [" + this.m7rInstanceFileLabel + "].");
 
-        Map<String, ApplicationConfigPatientSO> projectConfigSOMap = new HashMap<>();
+        InstanceConfigurationMap.Builder configurationMapBuilder = new InstanceConfigurationMap.Builder();
         for (String sectionName : configurationFactory.getSectionNames()) {
             if (sectionName.equalsIgnoreCase(InstanceConfiguration.GENERIC)) continue;
             Configuration projectConfiguration = configurationFactory.getConfiguration(sectionName);
             ApplicationConfigPatientSO applicationConfigSO = getApplicationConfigPatientSO(projectConfiguration);
-            projectConfigSOMap.put(sectionName, applicationConfigSO);
+            configurationMapBuilder.put(sectionName, applicationConfigSO);
         }
 
-        return projectConfigSOMap;
+        return configurationMapBuilder.build();
     }
 
     private ApplicationConfigGenericSO obtainBrandingConfigurationGeneric(ConfigurationFactory configurationFactory) {

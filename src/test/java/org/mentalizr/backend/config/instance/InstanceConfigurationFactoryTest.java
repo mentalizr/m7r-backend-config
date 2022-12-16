@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InstanceConfigurationFactoryTest {
 
-    Path resourcesDir = FileUtils.getWorkingDir().resolve("src/test/resources/");
+    final Path resourcesDir = FileUtils.getWorkingDir().resolve("src/test/resources/");
 
     @Test
     void brandingConfigurationGeneric() {

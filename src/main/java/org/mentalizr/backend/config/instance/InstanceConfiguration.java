@@ -1,47 +1,31 @@
 package org.mentalizr.backend.config.instance;
 
-import de.arthurpicht.utils.core.assertion.AssertMethodPrecondition;
-import de.arthurpicht.utils.core.collection.Maps;
-import de.arthurpicht.utils.core.strings.Strings;
 import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigGenericSO;
 import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
 import org.mentalizr.serviceObjects.frontend.therapist.ApplicationConfigTherapistSO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import static de.arthurpicht.utils.core.assertion.MethodPreconditions.assertArgumentNotNull;
 
 public class InstanceConfiguration {
 
     public static final String DEFAULT = "default";
     public static final String GENERIC = "generic";
 
-    private final Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap;
+    private final InstanceConfigurationMap instanceConfigurationMap;
     private final ApplicationConfigGenericSO applicationConfigGenericSO;
 
-    public InstanceConfiguration(Map<String, ApplicationConfigPatientSO> applicationConfigPatientSOMap, ApplicationConfigGenericSO applicationConfigGenericSO) {
-        AssertMethodPrecondition.parameterNotNull("applicationConfigPatientSOMap", applicationConfigPatientSOMap);
-        this.applicationConfigPatientSOMap = Maps.immutableMap(applicationConfigPatientSOMap);
+    public InstanceConfiguration(InstanceConfigurationMap instanceConfigurationMap, ApplicationConfigGenericSO applicationConfigGenericSO) {
+        assertArgumentNotNull("instanceConfigurationMap", instanceConfigurationMap);
+        this.instanceConfigurationMap = instanceConfigurationMap;
         this.applicationConfigGenericSO = applicationConfigGenericSO;
     }
 
     public ApplicationConfigPatientSO getApplicationConfigPatientSO(String programId) {
-        List<String> keyList = new ArrayList<>(this.applicationConfigPatientSOMap.keySet());
-        for (String key : keyList) {
-            if (key.equals(programId)) return this.applicationConfigPatientSOMap.get(key);
-            if (matchesAsteriskPattern(key, programId)) return this.applicationConfigPatientSOMap.get(key);
-        }
-        return this.applicationConfigPatientSOMap.get(DEFAULT);
+        return this.instanceConfigurationMap.getApplicationConfigPatientSO(programId);
     }
 
     public ApplicationConfigGenericSO getApplicationConfigGenericSO() {
         return this.applicationConfigGenericSO;
-    }
-
-    private boolean matchesAsteriskPattern(String key, String programId) {
-        if (!key.endsWith("*")) return false;
-        String pattern = Strings.cutEnd(key, 1);
-        return (programId.startsWith(pattern));
     }
 
     public ApplicationConfigTherapistSO getApplicationConfigTherapistSO() {
