@@ -23,7 +23,7 @@ public class InstanceConfigurationFactory {
     private static final String GENERIC__DEFAULT_LOGIN_SCREEN = "defaultLoginScreen";
     private static final String GENERIC__DEFAULT_LOGIN_SCREEN__LOGIN = "login";
     private static final String GENERIC__DEFAULT_LOGIN_SCREEN__ACCESS_KEY = "accessKey";
-
+    private static final String GENERIC_POLICY_VERSION = "policyVersion";
     private static final String NAME = "name";
     private static final String LOGO = "logo";
     private static final String PROGRAM = "program";
@@ -125,7 +125,12 @@ public class InstanceConfigurationFactory {
                     "[" + defaultLoginScreen + "]. Must be [" + GENERIC__DEFAULT_LOGIN_SCREEN__LOGIN + "] or " +
                     "[" + GENERIC__DEFAULT_LOGIN_SCREEN__ACCESS_KEY + "].");
 
-        return new ApplicationConfigGenericSO(title, logo, defaultLoginScreen);
+        if (!configuration.containsKey(GENERIC_POLICY_VERSION))
+            throw new RuntimeException("Configuration key [" + GENERIC_POLICY_VERSION + "] missing in section " +
+                    "[" + InstanceConfiguration.GENERIC + "] of configuration file [" + this.m7rInstanceFileLabel + "].");
+        String policyVersion = configuration.getString(GENERIC_POLICY_VERSION);
+
+        return new ApplicationConfigGenericSO(title, logo, defaultLoginScreen, policyVersion);
     }
 
     private void bindConfigurationFromClasspath(ConfigurationFactory configurationFactory) {
