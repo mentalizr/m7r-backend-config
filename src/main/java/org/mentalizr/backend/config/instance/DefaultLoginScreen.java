@@ -22,4 +22,9 @@ public class DefaultLoginScreen {
         return this.defaultLoginScreen.equals(ACCESS_KEY);
     }
 
+    @Override
+    public String toString() {
+        return this.defaultLoginScreen;
+    }
+
 }
