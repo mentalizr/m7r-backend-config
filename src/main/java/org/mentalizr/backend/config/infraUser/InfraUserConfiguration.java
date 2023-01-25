@@ -1,19 +1,18 @@
 package org.mentalizr.backend.config.infraUser;
 
+import de.arthurpicht.configuration.Configuration;
 import de.arthurpicht.configuration.ConfigurationFactory;
 import de.arthurpicht.configuration.ConfigurationFileNotFoundException;
+import org.mentalizr.commons.paths.host.hostDir.M7rInfraUserConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class InfraUserConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(InfraUserConfiguration.class);
-
-    private static final String M7R_CONFIG_FILE = "m7r.conf";
-    private static final String SYS_PROP = "m7r.config";
 
     private static final String SECTION_NAME__USER_DB = "user-db";
     private static final String SECTION_NAME__DOCUMENT_DB = "document-db";
@@ -35,28 +34,27 @@ public class InfraUserConfiguration {
     private static final String PROPERTY__M7R_ADMIN_USER = "admin_user";
     private static final String PROPERTY__M7R_ADMIN_PASSWORD = "admin_password";
 
-    private static de.arthurpicht.configuration.Configuration configurationUserDB;
-    private static de.arthurpicht.configuration.Configuration configurationDocumentDB;
-    private static de.arthurpicht.configuration.Configuration configurationM7r;
+    private final M7rInfraUserConfigFile m7rInfraUserConfigFile;
+    private Configuration configurationUserDB;
+    private Configuration configurationDocumentDB;
+    private Configuration configurationM7r;
 
-    static {
-        init();
+
+    public InfraUserConfiguration(M7rInfraUserConfigFile m7rInfraUserConfigFile) {
+        this.m7rInfraUserConfigFile = m7rInfraUserConfigFile;
+        load();
         doChecks();
     }
 
-    private static void init() {
-
-        logger.info("Start initializing configuration.");
-
+    private void load() {
+        Path path = this.m7rInfraUserConfigFile.asPath();
         ConfigurationFactory configurationFactory = new ConfigurationFactory();
-
-        String m7rConfig = System.getProperty(SYS_PROP);
-
-        if (m7rConfig != null && !m7rConfig.equals("")) {
-            File configFile = new File(m7rConfig);
-            bindConfigurationFromFilesystem(configurationFactory, configFile);
-        } else {
-            bindConfigurationFromClasspath(configurationFactory);
+        try {
+            configurationFactory.addConfigurationFileFromFilesystem(path.toFile());
+        } catch (ConfigurationFileNotFoundException | IOException e) {
+            String message = "Configuration file not found: [" + path.toAbsolutePath() + "].";
+            logger.error(message);
+            throw new RuntimeException(message);
         }
 
         configurationUserDB = configurationFactory.getConfiguration(SECTION_NAME__USER_DB);
@@ -64,28 +62,7 @@ public class InfraUserConfiguration {
         configurationM7r = configurationFactory.getConfiguration(SECTION_NAME__M7R);
     }
 
-    private static void bindConfigurationFromFilesystem(ConfigurationFactory configurationFactory, File configFile) {
-        try {
-            configurationFactory.addConfigurationFileFromFilesystem(configFile);
-            logger.info("Configuration file passed by System Property: " + configFile.getAbsolutePath());
-        } catch (ConfigurationFileNotFoundException | IOException e) {
-            String message = "Configuration file " + configFile.getAbsolutePath() + " not found. Passed by system property " + SYS_PROP + ".";
-            logger.error(message);
-            throw new RuntimeException(message);
-        }
-    }
-
-    private static void bindConfigurationFromClasspath(ConfigurationFactory configurationFactory) {
-        try {
-            configurationFactory.addConfigurationFileFromClasspath(M7R_CONFIG_FILE);
-            logger.info("Configuration file on classpath: " + M7R_CONFIG_FILE);
-        } catch (ConfigurationFileNotFoundException | IOException e) {
-            String message = "Configuration file " + M7R_CONFIG_FILE + " not found on classpath.";
-            throw new RuntimeException(message);
-        }
-    }
-
-    private static void doChecks() {
+    private void doChecks() {
 
         checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_ROOT_PASSWORD);
         checkForKeyExistence(SECTION_NAME__USER_DB, PROPERTY__USER_DB_NAME);
@@ -101,74 +78,74 @@ public class InfraUserConfiguration {
         checkForKeyExistence(SECTION_NAME__DOCUMENT_DB, PROPERTY__DOCUMENT_DB_PASSWORD);
     }
 
-    private static void checkForKeyExistence(String sectionName, String key) {
+    private void checkForKeyExistence(String sectionName, String key) {
 
         boolean exists = true;
 
-        if (sectionName.equals(SECTION_NAME__USER_DB) && !configurationUserDB.containsKey(key)) {
+        if (sectionName.equals(SECTION_NAME__USER_DB) && !this.configurationUserDB.containsKey(key)) {
             exists = false;
-        } else if (sectionName.equals(SECTION_NAME__DOCUMENT_DB) && !configurationDocumentDB.containsKey(key)) {
+        } else if (sectionName.equals(SECTION_NAME__DOCUMENT_DB) && !this.configurationDocumentDB.containsKey(key)) {
             exists = false;
         }
 
         if (exists) return;
 
         String message =
-                "Missing declaration in Configuration [" + M7R_CONFIG_FILE + "] for key [" + key + "] " +
+                "Missing declaration in Configuration [" + M7rInfraUserConfigFile.NAME + "] for key [" + key + "] " +
                         "in section [" + SECTION_NAME__USER_DB + "].";
         logger.error(message);
         throw new RuntimeException(message);
     }
 
-    public static String getUserDbRootPassword() {
+    public String getUserDbRootPassword() {
         return configurationUserDB.getString(PROPERTY__USER_DB_ROOT_PASSWORD);
     }
 
-    public static String getUserDbName() {
+    public String getUserDbName() {
         return configurationUserDB.getString(PROPERTY__USER_DB_NAME);
     }
 
-    public static String getUserDbUser() {
+    public String getUserDbUser() {
         return configurationUserDB.getString(PROPERTY__USER_DB_USER);
     }
 
-    public static String getUserDbPassword() {
+    public String getUserDbPassword() {
         return configurationUserDB.getString(PROPERTY__USER_DB_PASSWORD);
     }
 
-    public static String getUserDbHost() {
+    public String getUserDbHost() {
         return configurationUserDB.getString(PROPERTY__USER_DB_HOST);
     }
 
-    public static String getDocumentDbAdminName() {
+    public String getDocumentDbAdminName() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_ADMIN_NAME);
     }
 
-    public static String getDocumentDbAdminPassword() {
+    public String getDocumentDbAdminPassword() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_ADMIN_PASSWORD);
     }
 
-    public static String getDocumentDbHost() {
+    public String getDocumentDbHost() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_HOST);
     }
 
-    public static String getDocumentDbName() {
+    public String getDocumentDbName() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_NAME);
     }
 
-    public static String getDocumentDbUser() {
+    public String getDocumentDbUser() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_USER);
     }
 
-    public static String getDocumentDbPassword() {
+    public String getDocumentDbPassword() {
         return configurationDocumentDB.getString(PROPERTY__DOCUMENT_DB_PASSWORD);
     }
 
-    public static String getM7rAdminUser() {
+    public String getM7rAdminUser() {
         return configurationM7r.getString(PROPERTY__M7R_ADMIN_USER);
     }
 
-    public static String getM7rAdminPassword() {
+    public String getM7rAdminPassword() {
         return configurationM7r.getString(PROPERTY__M7R_ADMIN_PASSWORD);
     }
 
