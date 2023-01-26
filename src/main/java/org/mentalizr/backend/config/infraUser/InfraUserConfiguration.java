@@ -39,7 +39,6 @@ public class InfraUserConfiguration {
     private Configuration configurationDocumentDB;
     private Configuration configurationM7r;
 
-
     public InfraUserConfiguration(M7rInfraUserConfigFile m7rInfraUserConfigFile) {
         this.m7rInfraUserConfigFile = m7rInfraUserConfigFile;
         load();
