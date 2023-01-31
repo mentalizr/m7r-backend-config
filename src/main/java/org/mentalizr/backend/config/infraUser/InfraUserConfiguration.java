@@ -3,6 +3,10 @@ package org.mentalizr.backend.config.infraUser;
 import de.arthurpicht.configuration.Configuration;
 import de.arthurpicht.configuration.ConfigurationFactory;
 import de.arthurpicht.configuration.ConfigurationFileNotFoundException;
+import org.mentalizr.commons.EnvVarConfig;
+import org.mentalizr.commons.paths.FileNames;
+import org.mentalizr.commons.paths.M7rFile;
+import org.mentalizr.commons.paths.host.hostDir.M7rHostDir;
 import org.mentalizr.commons.paths.host.hostDir.M7rInfraUserConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +38,13 @@ public class InfraUserConfiguration {
     private static final String PROPERTY__M7R_ADMIN_USER = "admin_user";
     private static final String PROPERTY__M7R_ADMIN_PASSWORD = "admin_password";
 
-    private final M7rInfraUserConfigFile m7rInfraUserConfigFile;
+    private final M7rFile m7rInfraUserConfigFile;
     private Configuration configurationUserDB;
     private Configuration configurationDocumentDB;
     private Configuration configurationM7r;
 
-    public InfraUserConfiguration(M7rInfraUserConfigFile m7rInfraUserConfigFile) {
-        this.m7rInfraUserConfigFile = m7rInfraUserConfigFile;
+    public InfraUserConfiguration() {
+        this.m7rInfraUserConfigFile = new M7rInfraUserConfigFile();
         load();
         doChecks();
     }
@@ -50,8 +54,11 @@ public class InfraUserConfiguration {
         ConfigurationFactory configurationFactory = new ConfigurationFactory();
         try {
             configurationFactory.addConfigurationFileFromFilesystem(path.toFile());
+            logger.info("Load configuration file [" + FileNames.M7R_INFRA_USER_CONF + "] from " +
+                    "[" + this.m7rInfraUserConfigFile.toAbsolutePathString() + "].");
         } catch (ConfigurationFileNotFoundException | IOException e) {
-            String message = "Configuration file not found: [" + path.toAbsolutePath() + "].";
+            String message = "Configuration file [" + FileNames.M7R_INFRA_USER_CONF + "] " +
+                    "not found: [" + path.toAbsolutePath() + "].";
             logger.error(message);
             throw new RuntimeException(message);
         }
@@ -90,8 +97,8 @@ public class InfraUserConfiguration {
         if (exists) return;
 
         String message =
-                "Missing declaration in Configuration [" + M7rInfraUserConfigFile.NAME + "] for key [" + key + "] " +
-                        "in section [" + SECTION_NAME__USER_DB + "].";
+                "Missing declaration in Configuration [" + this.m7rInfraUserConfigFile.getFileName() + "] " +
+                        "for key [" + key + "] in section [" + SECTION_NAME__USER_DB + "].";
         logger.error(message);
         throw new RuntimeException(message);
     }

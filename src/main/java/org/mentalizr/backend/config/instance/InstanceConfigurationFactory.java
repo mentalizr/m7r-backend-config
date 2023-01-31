@@ -3,6 +3,7 @@ package org.mentalizr.backend.config.instance;
 import de.arthurpicht.configuration.Configuration;
 import de.arthurpicht.configuration.ConfigurationFactory;
 import de.arthurpicht.configuration.ConfigurationFileNotFoundException;
+import org.mentalizr.commons.paths.FileNames;
 import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigGenericSO;
 import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ public class InstanceConfigurationFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(InstanceConfigurationFactory.class);
 
-    private static final String DEFAULT_M7R_CONFIG_FILE = "m7r-instance.conf";
+//    private static final String DEFAULT_M7R_CONFIG_FILE = "m7r-instance.conf";
 
     private static final String GENERIC_TITLE = "title";
     private static final String GENERIC_LOGO = "logo";
@@ -39,13 +40,13 @@ public class InstanceConfigurationFactory {
     private final InstanceConfigurationMap instanceConfigurationMap;
     private final ApplicationConfigGenericSO applicationConfigGenericSO;
 
-    public static InstanceConfiguration createProjectConfigurationFromClasspath() {
-        InstanceConfigurationFactory instanceConfigurationFactory = new InstanceConfigurationFactory();
-        return new InstanceConfiguration(
-                instanceConfigurationFactory.getInstanceConfigurationMap(),
-                instanceConfigurationFactory.getApplicationConfigGenericSO()
-        );
-    }
+//    public static InstanceConfiguration createProjectConfigurationFromClasspath() {
+//        InstanceConfigurationFactory instanceConfigurationFactory = new InstanceConfigurationFactory();
+//        return new InstanceConfiguration(
+//                instanceConfigurationFactory.getInstanceConfigurationMap(),
+//                instanceConfigurationFactory.getApplicationConfigGenericSO()
+//        );
+//    }
 
     public static InstanceConfiguration createProjectConfigurationByPath(Path configurationFilePath) {
         InstanceConfigurationFactory instanceConfigurationFactory = new InstanceConfigurationFactory(configurationFilePath);
@@ -54,20 +55,20 @@ public class InstanceConfigurationFactory {
                 instanceConfigurationFactory.applicationConfigGenericSO);
     }
 
-    private InstanceConfigurationFactory() {
-        logger.info("Start initializing application configuration. Bind [" + DEFAULT_M7R_CONFIG_FILE + "] from classpath." );
-        this.m7rInstanceFileLabel = DEFAULT_M7R_CONFIG_FILE + " (from classpath)";
-
-        ConfigurationFactory configurationFactory = new ConfigurationFactory();
-        bindConfigurationFromClasspath(configurationFactory);
-
-        this.instanceConfigurationMap = obtainApplicationConfigMap(configurationFactory);
-        this.applicationConfigGenericSO = obtainBrandingConfigurationGeneric(configurationFactory);
-    }
+//    private InstanceConfigurationFactory() {
+//        logger.info("Start initializing m7r instance configuration. Bind [" + DEFAULT_M7R_CONFIG_FILE + "] from classpath." );
+//        this.m7rInstanceFileLabel = DEFAULT_M7R_CONFIG_FILE + " (from classpath)";
+//
+//        ConfigurationFactory configurationFactory = new ConfigurationFactory();
+//        bindConfigurationFromClasspath(configurationFactory);
+//
+//        this.instanceConfigurationMap = obtainApplicationConfigMap(configurationFactory);
+//        this.applicationConfigGenericSO = obtainBrandingConfigurationGeneric(configurationFactory);
+//    }
 
 
     private InstanceConfigurationFactory(Path configurationFilePath) {
-        logger.info("Start initializing application configuration. Bind [" + configurationFilePath + "]." );
+        logger.info("Load configuration file [" + FileNames.M7R_INSTANCE_CONF + "] from [" + configurationFilePath + "]." );
         this.m7rInstanceFileLabel = configurationFilePath.toString();
 
         ConfigurationFactory configurationFactory = new ConfigurationFactory();
@@ -133,14 +134,14 @@ public class InstanceConfigurationFactory {
         return new ApplicationConfigGenericSO(title, logo, defaultLoginScreen, policyVersion);
     }
 
-    private void bindConfigurationFromClasspath(ConfigurationFactory configurationFactory) {
-        try {
-            configurationFactory.addConfigurationFileFromClasspath(DEFAULT_M7R_CONFIG_FILE);
-        } catch (ConfigurationFileNotFoundException | IOException e) {
-            String message = "Configuration file [" + DEFAULT_M7R_CONFIG_FILE + "] not found on classpath.";
-            throw new RuntimeException(message);
-        }
-    }
+//    private void bindConfigurationFromClasspath(ConfigurationFactory configurationFactory) {
+//        try {
+//            configurationFactory.addConfigurationFileFromClasspath(DEFAULT_M7R_CONFIG_FILE);
+//        } catch (ConfigurationFileNotFoundException | IOException e) {
+//            String message = "Configuration file [" + DEFAULT_M7R_CONFIG_FILE + "] not found on classpath.";
+//            throw new RuntimeException(message);
+//        }
+//    }
 
     private void bindConfigurationFromFilesystem(ConfigurationFactory configurationFactory, File configFile) {
         try {
