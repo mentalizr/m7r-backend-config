@@ -20,14 +20,14 @@ dependencies {
     implementation 'org.mentalizr:m7r-commons:0.0.1-SNAPSHOT'
     implementation 'org.mentalizr:m7r-service-objects:0.0.1-SNAPSHOT'
 
-    implementation 'ch.qos.logback:logback-classic:1.4.5'
+    implementation 'ch.qos.logback:logback-classic:1.4.7'
 
-    implementation 'com.github.arthurpicht:utils-core:1.10.0'
+    implementation 'com.github.arthurpicht:utils-core:1.13.0'
     implementation 'com.github.arthurpicht:AP-Configuration:0.1.6'
 
     testImplementation 'com.github.arthurpicht:utils-io:0.0.17'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 }
 
 test {
