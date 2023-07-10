@@ -1,4 +1,4 @@
-package org.mentalizr.backend.config;
+package org.mentalizr.backend.config.instance;
 
 public class DefaultLoginScreen {
 
@@ -20,6 +20,11 @@ public class DefaultLoginScreen {
 
     public boolean isAccessKey() {
         return this.defaultLoginScreen.equals(ACCESS_KEY);
+    }
+
+    @Override
+    public String toString() {
+        return this.defaultLoginScreen;
     }
 
 }
