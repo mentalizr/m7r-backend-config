@@ -5,12 +5,6 @@ plugins {
 group 'org.mentalizr'
 version '1.0-SNAPSHOT'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
-    }
-}
-
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
