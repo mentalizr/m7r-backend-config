@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 
+@SuppressWarnings("unused")
 public class InfraUserConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(InfraUserConfiguration.class);
@@ -47,12 +48,13 @@ public class InfraUserConfiguration {
         doChecks();
     }
 
+    @SuppressWarnings("StringConcatenationArgumentToLogCall")
     private void load() {
         Path path = this.m7rInfraUserConfigFile.asPath();
         ConfigurationFactory configurationFactory = new ConfigurationFactory();
         try {
             configurationFactory.addConfigurationFileFromFilesystem(path.toFile());
-            logger.info("Load configuration file [" + FileNames.M7R_INFRA_USER_CONF + "] from " +
+            logger.debug("Load configuration file [" + FileNames.M7R_INFRA_USER_CONF + "] from " +
                     "[" + this.m7rInfraUserConfigFile.toAbsolutePathString() + "].");
         } catch (ConfigurationFileNotFoundException | IOException e) {
             String message = "Configuration file [" + FileNames.M7R_INFRA_USER_CONF + "] " +
