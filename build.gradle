@@ -2,12 +2,12 @@ plugins {
     id 'java-library'
 }
 
-group 'org.mentalizr'
-version '1.0-SNAPSHOT'
+group = 'org.mentalizr'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven { url "https://raw.githubusercontent.com/arthurpicht/mvn-repo/main/releases"}
+    maven { url = "https://raw.githubusercontent.com/arthurpicht/mvn-repo/main/releases"}
 }
 
 dependencies {
@@ -21,7 +21,7 @@ dependencies {
 
     testImplementation libs.ap.utils.io
     testImplementation libs.junit.jupiter
-    testRuntimeOnly libs.junit.engine
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
